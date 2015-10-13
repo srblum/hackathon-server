@@ -12,6 +12,7 @@ import pysam
 
 import ga4gh.datamodel.reads as reads
 import ga4gh.protocol as protocol
+import ga4gh.backend as backend
 
 
 class AbstractConverter(object):
@@ -73,15 +74,13 @@ class SamConverter(object):
         alignmentFile.close()
 
     def _getHeader(self):
-        # TODO where to get actual values for header?
-        # need some kind of getReadGroup(readGroupId) method in protocol
-        # just add these dummy lines for now
+        #Create header information using self._reference
         header = {
             'HD': {'VN': '1.0'},
-            'SQ': [
-                {'LN': 1575, 'SN': 'chr1'},
-                {'LN': 1584, 'SN': 'chr2'},
-            ],
+            'SQ': [{
+                'LN':self._reference.length,
+                'SN':self._reference.name
+            }]
         }
         return header
 
